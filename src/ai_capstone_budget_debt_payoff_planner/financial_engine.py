@@ -1,11 +1,19 @@
+class Debt:
+    def __init__(self, name, type, amount, apr):
+        self.name = name
+        self.type = type
+        self.amount = amount
+        self.apr = apr
+
 def collect_debt_details():
     """Collects details (name, current amount, APR and type) about user's debts"""
-    
-    debt_name = input('Enter account name: ')
-    debt_type = input('Enter debt type: ')
-    debt_amount = input('Enter amount owed: ')
-    debt_APR = input('Enter debt APR: ')
-    print(debt_name, debt_type, debt_amount, debt_APR)
-    return 0
+    name = input('Enter account name: ')
+    type = input('Enter debt type: ')
+    amount = input('Enter amount owed: ')
+    apr = input('Enter debt APR: ')
+    debt = Debt(name, type, amount, apr)
+    return debt
 
-collect_debt_details()
+
+a = collect_debt_details()
+print(a.name, a.type, a.amount, a.apr)
