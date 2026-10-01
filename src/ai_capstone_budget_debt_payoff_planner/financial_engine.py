@@ -16,8 +16,11 @@ def collect_debt_details():
 
 def calculate_avalance(debt_list):
     """Receives a list of debt objects and sorts them out in place from lowest to highest balance"""
-    debt_list.sort(key=lambda debt: debt.balance)
-    return None
+    avalanche_debt_list = sorted(debt_list, key=lambda debt: debt.balance)
+    return avalanche_debt_list
+
+# def calculate_snowball():
+#     return None
 
 
 # a = collect_debt_details()
@@ -31,9 +34,10 @@ debt5 = Debt('debt5', 'Student Loan', 10, 4)
 
 debt_list = [debt1, debt2, debt3, debt4, debt5]
 
+avalanche_debt_list = calculate_avalance(debt_list)
+
 for d in debt_list:
     print(d.name, d.type, d.balance, d.apr)
 
-calculate_avalance(debt_list)
-for d in debt_list:
+for d in avalanche_debt_list:
     print(d.name, d.type, d.balance, d.apr)
