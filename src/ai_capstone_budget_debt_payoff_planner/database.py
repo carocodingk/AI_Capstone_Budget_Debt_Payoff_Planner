@@ -47,7 +47,10 @@ def init_db():
         conn.commit()
         print('init_db running. Tables created')
 
+
+# *************************************
 # *****   INCOME CRUD FUNCTIONS   *****
+# *************************************
 def add_income(name, amount):
     """Stores an income record """
     with connect_database() as conn:
@@ -72,6 +75,20 @@ def show_all_income():
         return [dict(row) for row in rows]
 
 
+# ***************************************
+# *****   EXPENSES CRUD FUNCTIONS   *****
+# ***************************************
+def add_expense(description, amount, category):
+    """Stores an expense record """
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        #   Using parameterized queries to prevent SQL injection attacks
+        cursor.execute(
+            "INSERT INTO expenses (description, amount, category) VALUES (?, ?, ?);", (description, amount, category)
+        )
+        conn.commit()
+        return cursor.lastrowid
+
 
 
 
@@ -83,4 +100,8 @@ def show_all_income():
 # print('lastRowID ', lastRowID)
 # print(show_all_income())
 add_income('work2', 120)
+add_income('work3', 'd')
 print(show_all_income())
+
+expense_lastRowID = add_expense('Target', 35, 'Groceries')
+print('Expenses: ', expense_lastRowID)
