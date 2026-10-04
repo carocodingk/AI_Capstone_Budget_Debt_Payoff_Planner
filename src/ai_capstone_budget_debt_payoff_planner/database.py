@@ -66,7 +66,6 @@ def show_all_income():
     """Retrieves all income sources"""
     with connect_database() as conn:
         cursor = conn.cursor()
-        #   Using parameterized queries to prevent SQL injection attacks
         cursor.execute(
             "SELECT * FROM income"
             )
@@ -89,6 +88,17 @@ def add_expense(description, amount, category):
         conn.commit()
         return cursor.lastrowid
 
+def show_all_expenses():
+    """Retrieves all expenses records"""
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM expenses"
+            )
+        conn.commit()
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
+
 
 
 
@@ -105,3 +115,6 @@ print(show_all_income())
 
 expense_lastRowID = add_expense('Target', 35, 'Groceries')
 print('Expenses: ', expense_lastRowID)
+expense_lastRowID = add_expense('CVS', 50, 'Clothing')
+print('Expenses: ', expense_lastRowID)
+print(show_all_expenses())
