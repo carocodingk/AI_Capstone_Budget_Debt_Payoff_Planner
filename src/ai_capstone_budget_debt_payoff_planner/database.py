@@ -3,6 +3,8 @@ import sqlite3
 def connect_database():
     """Creates a new database connection if it doesn't exist"""
     conn = sqlite3.connect('planner.db')
+    # Indicates SQLite to access columns by name
+    conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
@@ -62,9 +64,12 @@ def add_income(name, amount):
 
 
 
+
 # print('database.py Running')
 # connect_database()
-init_db()
+# init_db()
 
-lastRowID = add_income('work', 100)
-print('lastRowID ', lastRowID)
+# lastRowID = add_income('work', 100)
+# print('lastRowID ', lastRowID)
+# print(show_all_income())
+show_all_income()
