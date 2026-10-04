@@ -73,6 +73,12 @@ def show_all_income():
         rows = cursor.fetchall()
         return [dict(row) for row in rows]
 
+def delete_income(income_id):
+    """Deletes an income record by ID."""
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM income WHERE id = ?", (income_id,))
+        conn.commit()
 
 # ***************************************
 # *****   EXPENSES CRUD FUNCTIONS   *****
@@ -98,6 +104,13 @@ def show_all_expenses():
         conn.commit()
         rows = cursor.fetchall()
         return [dict(row) for row in rows]
+
+def delete_expense(expense_id):
+    """Deletes an expense record by ID."""
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM expense WHERE id = ?", (expense_id,))
+        conn.commit()
 
 
 # ***************************************
@@ -125,6 +138,12 @@ def show_all_debts():
         rows = cursor.fetchall()
         return [dict(row) for row in rows]
 
+def delete_debt(debt_id):
+    """Deletes a debt record by ID."""
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM debts WHERE id = ?", (debt_id,))
+        conn.commit()
 
 
 # print('database.py Running')
@@ -149,3 +168,6 @@ print('Debt: ', debt_lastRowID)
 debt_lastRowID = add_debt('Credit card', 50, 19.88, 12)
 print('Debt: ', debt_lastRowID)
 print(show_all_debts())
+delete_debt(1)
+print(show_all_debts())
+
