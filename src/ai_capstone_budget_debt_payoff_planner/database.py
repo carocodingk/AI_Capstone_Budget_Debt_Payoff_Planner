@@ -179,17 +179,20 @@ def database_testing():
 
 
 # print('database.py Running')
-connect_database()
-init_db()
 
-database_testing()
+########################
+# connect_database()
+# init_db()
 
-print('Income')
-print(show_all_income())
-print('\nExpenses')
-print(show_all_expenses())
-print('\nDebts')
-print(show_all_debts())
+# database_testing()
+
+# print('Income')
+# print(show_all_income())
+# print('\nExpenses')
+# print(show_all_expenses())
+# print('\nDebts')
+# print(show_all_debts())
+########################
 
 # print(add_income('Work 1', 300))
 # print(add_income('Work 2', 350))
