@@ -10,8 +10,40 @@ def init_db():
     #"with" simplifies resource management by automatically handling setup and cleanup of conn even if error or exception
     with connect_database() as conn:
         #Creates a db cursor to execute SQL statements and fetch results from SQL queries
-        cur = conn.cursor()
-        print('init_db running')
+        cursor = conn.cursor()
+
+        #Income table 
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS income (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                amount REAL NOT NULL
+            )
+        """)
+
+        #Expense table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS expenses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                description TEXT NOT NULL, 
+                amount REAL NOT NULL,
+                category TEXT NOT NULL
+            )
+        """)
+
+        #Debts table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS debts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                name TEXT NOT NULL, 
+                balance REAL NOT NULL, 
+                apr REAL NOT NULL, 
+                min_payment REAL NOT NULL
+            )
+        """)
+        #Save data 
+        conn.commit()
+        print('init_db running. Tables created')
 
 
 
