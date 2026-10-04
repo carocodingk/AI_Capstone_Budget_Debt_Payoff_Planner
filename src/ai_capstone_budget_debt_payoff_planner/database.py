@@ -59,7 +59,17 @@ def add_income(name, amount):
         conn.commit()
         return cursor.lastrowid
 
-
+def show_all_income():
+    """Retrieves all income sources"""
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        #   Using parameterized queries to prevent SQL injection attacks
+        cursor.execute(
+            "SELECT * FROM income"
+            )
+        conn.commit()
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
 
 
 
@@ -72,4 +82,5 @@ def add_income(name, amount):
 # lastRowID = add_income('work', 100)
 # print('lastRowID ', lastRowID)
 # print(show_all_income())
-show_all_income()
+add_income('work2', 120)
+print(show_all_income())
