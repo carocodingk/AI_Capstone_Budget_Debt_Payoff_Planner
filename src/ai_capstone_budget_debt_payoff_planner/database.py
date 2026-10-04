@@ -114,6 +114,17 @@ def add_debt(name, balance, apr, min_payment):
         conn.commit()
         return cursor.lastrowid
 
+def show_all_debts():
+    """Retrieves all debts records"""
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM debts"
+            )
+        conn.commit()
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
+
 
 
 # print('database.py Running')
@@ -137,4 +148,4 @@ debt_lastRowID = add_debt('Personal loan', 200, 8, 5)
 print('Debt: ', debt_lastRowID)
 debt_lastRowID = add_debt('Credit card', 50, 19.88, 12)
 print('Debt: ', debt_lastRowID)
-# print(show_all_expenses())
+print(show_all_debts())
