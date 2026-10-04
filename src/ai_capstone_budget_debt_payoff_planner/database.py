@@ -47,6 +47,15 @@ def init_db():
         conn.commit()
         print('init_db running. Tables created')
 
+def delete_all_tables():
+    """Deletes all tables (income, expenses, debts) from database"""
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM income")
+        cursor.execute("DELETE FROM expenses")
+        cursor.execute("DELETE FROM debts")
+        conn.commit()
+
 
 # *************************************
 # *****   INCOME CRUD FUNCTIONS   *****
@@ -109,7 +118,7 @@ def delete_expense(expense_id):
     """Deletes an expense record by ID."""
     with connect_database() as conn:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM expense WHERE id = ?", (expense_id,))
+        cursor.execute("DELETE FROM expenses WHERE id = ?", (expense_id,))
         conn.commit()
 
 
@@ -163,11 +172,18 @@ def delete_debt(debt_id):
 # print('Expenses: ', expense_lastRowID)
 # print(show_all_expenses())
 
-debt_lastRowID = add_debt('Personal loan', 200, 8, 5)
-print('Debt: ', debt_lastRowID)
-debt_lastRowID = add_debt('Credit card', 50, 19.88, 12)
-print('Debt: ', debt_lastRowID)
-print(show_all_debts())
-delete_debt(1)
-print(show_all_debts())
+# debt_lastRowID = add_debt('Personal loan', 200, 8, 5)
+# print('Debt: ', debt_lastRowID)
+# debt_lastRowID = add_debt('Credit card', 50, 19.88, 12)
+# print('Debt: ', debt_lastRowID)
+# print(show_all_debts())
+# delete_debt(1)
+# print(show_all_debts())
+
+
+# delete_all_tables()
+
+# print(show_all_debts())
+# print(show_all_expenses)
+# print(show_all_income)
 
