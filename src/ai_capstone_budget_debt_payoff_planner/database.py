@@ -100,6 +100,20 @@ def show_all_expenses():
         return [dict(row) for row in rows]
 
 
+# ***************************************
+# *****   DEBTS CRUD FUNCTIONS   *****
+# ***************************************
+def add_debt(name, balance, apr, min_payment):
+    "Stores debt into debts table"
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        #   Using parameterized queries to prevent SQL injection attacks
+        cursor.execute(
+            "INSERT INTO debts (name, balance, apr, min_payment) VALUES (?, ?, ?, ?);", (name, balance, apr, min_payment)
+        )
+        conn.commit()
+        return cursor.lastrowid
+
 
 
 # print('database.py Running')
@@ -109,12 +123,18 @@ def show_all_expenses():
 # lastRowID = add_income('work', 100)
 # print('lastRowID ', lastRowID)
 # print(show_all_income())
-add_income('work2', 120)
-add_income('work3', 'd')
-print(show_all_income())
+# add_income('work2', 120)
+# add_income('work3', 'd')
+# print(show_all_income())
 
-expense_lastRowID = add_expense('Target', 35, 'Groceries')
-print('Expenses: ', expense_lastRowID)
-expense_lastRowID = add_expense('CVS', 50, 'Clothing')
-print('Expenses: ', expense_lastRowID)
-print(show_all_expenses())
+# expense_lastRowID = add_expense('Target', 35, 'Groceries')
+# print('Expenses: ', expense_lastRowID)
+# expense_lastRowID = add_expense('CVS', 50, 'Clothing')
+# print('Expenses: ', expense_lastRowID)
+# print(show_all_expenses())
+
+debt_lastRowID = add_debt('Personal loan', 200, 8, 5)
+print('Debt: ', debt_lastRowID)
+debt_lastRowID = add_debt('Credit card', 50, 19.88, 12)
+print('Debt: ', debt_lastRowID)
+# print(show_all_expenses())
