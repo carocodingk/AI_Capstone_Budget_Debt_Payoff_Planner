@@ -78,25 +78,23 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
                 print('extraaaaaa ', debt.balance)
                 break
 
-        # remaining_debt_total = 0
-        # for debt in debt_list:
-        #     remaining_debt_total += debt.balance
+        remaining_debt_total = 0
+        for debt in avalanche_debt_list:
+            remaining_debt_total += debt.balance
             
-        # monthly_history.append({
-        #     'month': total_months,
-        #     'remaining_balance': remaining_debt_total
-        # })
+        monthly_history.append({
+            'month': total_months,
+            'remaining_balance': remaining_debt_total
+        })
 
-    print(monthly_history)
-
-
-
-
-
-
-
-
-    return avalanche_debt_list
+    # print(monthly_history)
+    return {
+        # avalanche_debt_list
+        'strategy': 'Avalanche',
+        'total_months': total_months,
+        'total_interest_paid': total_interest_paid,
+        'monthly_history': monthly_history
+    }
 
 def calculate_snowball(debt_list):
     """
@@ -125,7 +123,9 @@ debt2 = Debt('debt2', 5000, 12, 200)
 debt_list = [debt1, debt2]
 # debt_list = [debt1, debt2, debt3, debt4, debt5, debt6]
 
-avalanche_debt_list = calculate_avalanche(debt_list, 1000)
+avalanche_debt = calculate_avalanche(debt_list, 500)
+
+print(avalanche_debt)
 
 # snowball_debt_list = calculate_snowball(debt_list)
 
