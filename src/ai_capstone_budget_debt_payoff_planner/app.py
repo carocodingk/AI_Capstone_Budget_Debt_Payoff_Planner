@@ -20,7 +20,7 @@ from ai_capstone_budget_debt_payoff_planner.database import (
 )
 
 from ai_capstone_budget_debt_payoff_planner.financial_engine import (
-    Debt,
+    # Debt,
     # collect_debt_details,
     calculate_avalanche, 
     calculate_snowball
@@ -134,7 +134,7 @@ with tab_expenses:
 #   TAB 3: Debts tracker
 with tab_debts:
     st.subheader("Manage Active Debts")
-    
+    debts = show_all_debts()
     col1, col2 = st.columns([1, 2])
     
     with col1:
@@ -155,7 +155,7 @@ with tab_debts:
 
     with col2:
         st.markdown("#### Current Closed Balance Debts")
-        debts = show_all_debts()
+        # debts = show_all_debts()
         if debts:
             df_debts = pd.DataFrame(debts)
             st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], use_container_width=True)
@@ -170,6 +170,13 @@ with tab_debts:
 
 #######################
     st.subheader("Debt Pay Off Strategy Analysis")
+    extra_budget = st.number_input("Extra monthly budget towards debt ($) ", min_value=0.0, step=10.00)
+    if not debts: 
+        st.warning('No debts reported')
+    else:
+        snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
+    #     avalanche_res = calculate_avalanche(debts, extra_monthly_budget=extra_budget)
+
 
     
 
