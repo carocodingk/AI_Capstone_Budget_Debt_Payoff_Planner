@@ -178,14 +178,14 @@ def calculate_snowball(debt_list, extra_monthly_budget):
 # a = collect_debt_details()
 # print(a.name, a.type, a.balance, a.apr)
 
-debt1 = Debt('debt1', 1000, 6, 100)
-debt2 = Debt('debt2', 5000, 12, 200)
+# debt1 = Debt('debt1', 1000, 6, 100)
+# debt2 = Debt('debt2', 5000, 12, 200)
 # debt3 = Debt('debt3', 3500, 23, 120)
 # debt4 = Debt('debt4', 1000, 7, 50)
 # debt5 = Debt('debt5', 7000, 4, 150)
 # debt6 = Debt('debt6', 100, 4, 130)
 
-debt_list = [debt1, debt2]
+# debt_list = [debt1, debt2]
 # debt_list = [debt1, debt2, debt3, debt4, debt5, debt6]
 
 #################
@@ -193,8 +193,8 @@ debt_list = [debt1, debt2]
 # print(avalanche_debt)
 ##################
 
-snowball_debt_list = calculate_snowball(debt_list, 200)
-print(snowball_debt_list)
+# snowball_debt_list = calculate_snowball(debt_list, 200)
+# print(snowball_debt_list)
 
 # print('Debt List')
 # for d in debt_list:
