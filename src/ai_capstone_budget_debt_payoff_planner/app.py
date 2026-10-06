@@ -59,11 +59,11 @@ st.divider()
 #   Main Dashboard Layout
 ################################################################################
 
-tab_income, tab_expenses, tab_debts = st.tabs(["Income Streams", "Expenses Trackers", "Debt Management"])
+tab_income, tab_expenses, tab_debts = st.tabs(["Income Sources", "Expenses Trackers", "Debt Management"])
 
 #   TAB 1: Income Streams
 with tab_income:
-    st.subheader("Manage Income Streams")
+    st.subheader("Manage Income Sources")
 
     col1, col2 = st.columns([1, 2])
 
@@ -92,4 +92,85 @@ with tab_income:
             if st.button("Delete Selected Income Source"):
                 delete_income(income_to_delete)
                 st.rerun()
+
+
+#   TAB 2: Expenses Tracker
+with tab_expenses:
+    st.subheader("Expense tracker")
+
+    col1, col2 = st.columns([1, 2])
+
+    with col1:
+        st.markdown('#### Add new expense')
+        with st.form("add_expense_form", clear_on_submit=True):
+            exp_description = st.text_input("Expense description", placeholder="e.g. Breakfast")
+            exp_amount = st.number_input("Amount ($)", min_value=0.0, step=5.0)
+            exp_category = st.selectbox("Select category", ('', 'Food', 'Housing', 'Utilities', 'Transportation', 'Entertainment', 'Personal Care', 'Clothing', 'Education', 'Other'))
+
+            if st.form_submit_button("Log Expense"):
+                if exp_description.strip():
+                    if not exp_category.strip():
+                        exp_category = categorize_expense(exp_description) if check_ollama_status() else "Other"
+                        print('Here ', exp_category)
+                    add_expense(exp_description, exp_amount, exp_category)
+                    st.rerun()
+                else:
+                    st.error("Please enter a valid expense description.")
+
+    with col2:
+        st.markdown('#### Expenses Log')
+        expenses = show_all_expenses()
+        if expenses:
+            df_expenses = pd.DataFrame(expenses)
+            st.dataframe(df_expenses[["id", "description", "amount", "category"]], use_container_width=True)
+            expense_to_delete = st.selectbox("Select expense record to remove:", [d["id"] for d in expenses], format_func=lambda x: f"ID {x}: {next(d['description'] for d in expenses if d['id']==x)}")
+            if st.button("Delete Selected Expense"):
+                delete_expense(expense_to_delete)
+                st.rerun()
+        else:
+            st.info('No expenses logged yet')
+
+
+#   TAB 3: Debts tracker
+with tab_debts:
+    st.subheader("Manage Active Debts")
+    
+    col1, col2 = st.columns([1, 2])
+    
+    with col1:
+        st.markdown("#### Add New Debt")
+        with st.form("add_debt_form", clear_on_submit=True):
+            d_name = st.text_input("Debt Name", placeholder="e.g. Visa Credit Card")
+            d_balance = st.number_input("Current Balance ($)", min_value=0.0, value=1000.0, step=50.0)
+            d_apr = st.number_input("APR (%)", min_value=0.0, value=18.5, step=0.1)
+            d_min = st.number_input("Minimum Monthly Payment ($)", min_value=0.0, value=35.0, step=5.0)
+            
+            if st.form_submit_button("Add Debt"):
+                if d_name.strip():
+                    add_debt(d_name, d_balance, d_apr, d_min)
+                    st.success(f"Added {d_name}!")
+                    st.rerun()
+                else:
+                    st.error("Please enter a valid debt name.")
+
+    with col2:
+        st.markdown("#### Current Closed Balance Debts")
+        debts = show_all_debts()
+        if debts:
+            df_debts = pd.DataFrame(debts)
+            st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], use_container_width=True)
+            
+            # Simple deletion control
+            debt_to_delete = st.selectbox("Select debt to remove:", [d["id"] for d in debts], format_func=lambda x: f"ID {x}: {next(d['name'] for d in debts if d['id']==x)}")
+            if st.button("Delete Selected Debt"):
+                delete_debt(debt_to_delete)
+                st.rerun()
+        else:
+            st.info("No active debts added yet. Use the form on the left to add your accounts.")
+
+#######################
+    st.subheader("Debt Pay Off Strategy Analysis")
+
+    
+
 
