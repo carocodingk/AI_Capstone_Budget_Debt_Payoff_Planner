@@ -4,6 +4,8 @@
 """
 
 import streamlit as st
+import pandas as pd
+
 from ai_capstone_budget_debt_payoff_planner.database import (
     init_db,
     add_income,
@@ -52,3 +54,42 @@ if not check_ollama_status():
     st.warning("Local Ollama Server is offline. Expense classification and Debt strategy summary are unavailable")
 
 st.divider()
+
+################################################################################
+#   Main Dashboard Layout
+################################################################################
+
+tab_income, tab_expenses, tab_debts = st.tabs(["Income Streams", "Expenses Trackers", "Debt Management"])
+
+#   TAB 1: Income Streams
+with tab_income:
+    st.subheader("Manage Income Streams")
+
+    col1, col2 = st.columns([1, 2])
+
+    with col1: 
+        st.markdown("##### Add New Income")
+        with st.form("add_income_form", clear_on_submit=True):
+            i_name = st.text_input("Income Name", placeholder="e.g. Work payroll")
+            i_amount = st.number_input("Amount ($)", min_value=0.0, value=0.0, step=50.0)
+            
+            if st.form_submit_button("Add Income"):
+                if i_name.strip():
+                    add_income(i_name, i_amount)
+                    st.success(f"Added {i_name}!")
+                    st.rerun()
+                else:
+                    st.error("Please enter a valid income name.")
+
+    with col2:
+        st.markdown("##### Current Income Sources")
+        income = show_all_income()
+        if income:
+            df_income = pd.DataFrame(income)
+            st.dataframe(df_income[["id", "name", "amount"]], use_container_width=True)
+
+            income_to_delete = st.selectbox("Select income source to remove:", [d["id"] for d in income], format_func=lambda x: f"ID {x}: {next(d['name'] for d in income if d['id']==x)}")
+            if st.button("Delete Selected Income Source"):
+                delete_income(income_to_delete)
+                st.rerun()
+

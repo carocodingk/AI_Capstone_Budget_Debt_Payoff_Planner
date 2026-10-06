@@ -194,8 +194,8 @@ def database_testing():
 # print(show_all_debts())
 ########################
 
-# print(add_income('Work 1', 300))
-# print(add_income('Work 2', 350))
+print(add_income('Work 1', 300))
+print(add_income('Work 2', 350))
 # print(show_all_income())
 
 # lastRowID = add_income('work', 100)
