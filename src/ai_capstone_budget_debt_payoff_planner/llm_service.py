@@ -81,14 +81,14 @@ def generate_strategy_summary(snowball_result, avalanche_result):
         print(f"Failed to generate strategy summary: {err}")
         return "AI summary service is currently unavailable. Check that Ollama is running locally."
 
-mock_snowball = {"total_months": 18, "total_interest_paid": 1250.50}
-mock_avalanche = {"total_months": 15, "total_interest_paid": 820.10}
+# mock_snowball = {"total_months": 18, "total_interest_paid": 1250.50}
+# mock_avalanche = {"total_months": 15, "total_interest_paid": 820.10}
         
-summary = generate_strategy_summary(mock_snowball, mock_avalanche)
-print("Generated Summary:\n")
-print(summary)
+# summary = generate_strategy_summary(mock_snowball, mock_avalanche)
+# print("Generated Summary:\n")
+# print(summary)
 
-print(mock_avalanche['total_months'])
+# print(mock_avalanche['total_months'])
 
 
 

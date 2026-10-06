@@ -30,4 +30,25 @@ from ai_capstone_budget_debt_payoff_planner.llm_service import (
     generate_strategy_summary
 )
 
+################################################################################
+#   Page configuration and Database initialization
+################################################################################
+st.set_page_config(
+    page_title="AI Budget & Debt Payoff Planner",
+    page_icon=None,
+    layout="wide",
+)
 
+#   Initialize database
+init_db()
+
+st.title("💰 AI Budget & Debt Payoff Planner")
+st.caption("Privacy-First Local Personal Finance Assistant | Powered by Ollama")
+st.warning("""IMPORTANT: Development and use of this application is for educational purposes only. 
+    This application does NOT provide professional financial, legal, tax or investment advice.""")
+
+#   Check Ollama connection 
+if not check_ollama_status():
+    st.warning("Local Ollama Server is offline. Expense classification and Debt strategy summary are unavailable")
+
+st.divider()
