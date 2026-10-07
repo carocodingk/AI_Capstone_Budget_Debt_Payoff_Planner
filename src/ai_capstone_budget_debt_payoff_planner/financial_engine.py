@@ -1,4 +1,5 @@
 import pytest
+import copy
 
 # class Debt:
 #     def __init__(self, name, balance, apr, min_payment):
@@ -36,11 +37,12 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
     monthly_history = []
 
     # Sort debt list by APR in descending (highest APR -> lowest APR)
-    avalanche_debt_list = sorted(debt_list, key=lambda debt: debt['apr'], reverse=True)
+    avalanche_debt_list = copy.deepcopy(debt_list)
+    avalanche_debt_list.sort(key=lambda debt: debt['apr'], reverse=True)
     # print('here: ', avalanche_debt_list)
 
-    for d in avalanche_debt_list:
-        print('hello ', [d.name, d.balance, d.apr, d.min_payment])
+    # for d in avalanche_debt_list:
+    #     print('hello ', [d.name, d.balance, d.apr, d.min_payment])
 
     while any (debt['balance'] > 0 for debt in avalanche_debt_list):
         total_months += 1
@@ -53,21 +55,21 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
                 interest = calculate_monthly_interest(debt['balance'], debt['apr'])
                 debt['balance'] += interest 
                 total_interest_paid = round(total_interest_paid + interest, 2)
-                print(debt['name'], interest)
+                # print(debt['name'], interest)
                 # print('total interest payment: ', total_interest_paid)
 
         #   Make minimum payment to all debts
         for debt in avalanche_debt_list:
             if debt['balance'] > 0:
                 min_pay = min(debt['balance'], debt['min_payment'])
-                print('debt before minimum ', debt['balance'])
+                # print('debt before minimum ', debt['balance'])
                 debt['balance'] = round(debt['balance'] - min_pay, 2)
-                print('debt balance after minimum: ', debt['balance'])
+                # print('debt balance after minimum: ', debt['balance'])
             else:
                 #   Once debt is paid, its min payment is added to extra budget on the following month
                 current_extra_pool += debt['min_payment'] 
-                print('DEBT IS PAID OFF')
-                print('extra pool: ', current_extra_pool)
+                # print('DEBT IS PAID OFF')
+                # print('extra pool: ', current_extra_pool)
 
         #   Use extra budget pool to pay highest APR debt. Ignores other debts even if there's left over extra budget
         for debt in avalanche_debt_list:
@@ -76,7 +78,7 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
                 debt['balance'] -= extra_pay
                 #   Remaining extra pool 
                 current_extra_pool -= extra_pay 
-                print('extraaaaaa ', debt['balance'])
+                # print('extraaaaaa ', debt['balance'])
                 break
 
         remaining_debt_total = 0
@@ -85,10 +87,11 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
             
         monthly_history.append({
             'month': total_months,
-            'remaining_balance': remaining_debt_total
+            'remaining_balance': round(remaining_debt_total, 2)
         })
-
+        # print('TOTAL MONTHS ', total_months)
     # print(monthly_history)
+    
     return {
         # avalanche_debt_list
         'strategy': 'Avalanche',
@@ -109,7 +112,8 @@ def calculate_snowball(debt_list, extra_monthly_budget):
     monthly_history = []
 
     # Sort debt list by BALANCE in ascending (lowest balance -> highest balance)
-    snowball_debt_list = sorted(debt_list, key=lambda debt: debt['balance'])
+    snowball_debt_list = copy.deepcopy(debt_list)
+    snowball_debt_list.sort(key=lambda debt: debt['balance'])
     # print('here: ', avalanche_debt_list)
 
     # for d in snowball_debt_list:
@@ -126,20 +130,20 @@ def calculate_snowball(debt_list, extra_monthly_budget):
                 interest = calculate_monthly_interest(debt['balance'], debt['apr'])
                 debt['balance'] += interest 
                 total_interest_paid = round(total_interest_paid + interest, 2)
-                print(debt['name'], interest)
+                # print(debt['name'], interest)
                 # print('total interest payment: ', total_interest_paid)
 
         #   Make minimum payment to all debts
         for debt in snowball_debt_list:
             if debt['balance'] > 0:
                 min_pay = min(debt['balance'], debt['min_payment'])
-                print('debt before minimum ', debt['balance'])
+                # print('debt before minimum ', debt['balance'])
                 debt['balance'] = round(debt['balance'] - min_pay, 2)
-                print('debt balance after minimum: ', debt['balance'])
+                # print('debt balance after minimum: ', debt['balance'])
             else:
                 #   Once debt is paid, its min payment is added to extra budget on the following month
                 current_extra_pool += debt['min_payment'] 
-                print('extra pool: ', current_extra_pool)
+                # print('extra pool: ', current_extra_pool)
 
         #   Use extra budget pool to pay highest APR debt. Ignores other debts even if there's left over extra budget
         for debt in snowball_debt_list:
@@ -148,7 +152,7 @@ def calculate_snowball(debt_list, extra_monthly_budget):
                 debt['balance'] -= extra_pay
                 #   Remaining extra pool 
                 current_extra_pool -= extra_pay 
-                print('extraaaaaa ', debt['balance'])
+                # print('extraaaaaa ', debt['balance'])
                 break
 
         remaining_debt_total = 0
@@ -157,16 +161,16 @@ def calculate_snowball(debt_list, extra_monthly_budget):
             
         monthly_history.append({
             'month': total_months,
-            'remaining_balance': remaining_debt_total
+            'remaining_balance': round(remaining_debt_total, 2)
         })
 
     # print(monthly_history)
-        print('###########################')
+        # print('###########################')
 
-
+        # print('curr_month: ', total_months)
     return {
-        #   avalanche_debt_list
-        'strategy': 'Avalanche',
+        #   snowball_debt_list
+        'strategy': 'Snowball',
         'total_months': total_months,
         'total_interest_paid': total_interest_paid,
         'monthly_history': monthly_history

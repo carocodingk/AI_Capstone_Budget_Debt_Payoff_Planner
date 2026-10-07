@@ -175,7 +175,18 @@ with tab_debts:
         st.warning('No debts reported')
     else:
         snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
-    #     avalanche_res = calculate_avalanche(debts, extra_monthly_budget=extra_budget)
+        for i in debts:
+            print('hello ', i)
+        avalanche_res = calculate_avalanche(debts, extra_monthly_budget=extra_budget)
+        # print('HELLOOOO ', snowball_res)
+        # for x in snowball_res['monthly_history']:
+        #     print(x)
+        # for x in avalanche_res['monthly_history']:
+        #     print(x)
+
+        print(snowball_res)
+        # print('\n')
+        print(avalanche_res)
 
 
     
