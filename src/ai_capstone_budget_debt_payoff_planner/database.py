@@ -1,5 +1,4 @@
 import sqlite3
-import pytest
 
 def connect_database():
     """Creates a new database connection if it doesn't exist"""
@@ -154,74 +153,3 @@ def delete_debt(debt_id):
         cursor = conn.cursor()
         cursor.execute("DELETE FROM debts WHERE id = ?", (debt_id,))
         conn.commit()
-
-
-# ***************************************
-# **************   TESTING  *************
-# ***************************************
-def database_testing():
-    assert add_income('Work 1', 300) == 1
-    assert add_income('Work 2', 350) == 2
-    assert add_income('Work 3', 400) == 3
-
-    assert add_expense('Uber ride', 27.50, 'Transportation') == 1
-    assert add_expense('Makeup', 12.99, 'Personal Care') == 2
-    assert add_expense('Gym', 35.45, 'Health') == 3
-
-    assert add_debt('Personal loan', 2000, 8, 100) == 1
-    assert add_debt('Credit card', 5000, 19.88, 75) == 2
-    assert add_debt('Car payment', 15000, 4.30, 250) == 3
-
-    assert delete_income(2) == None
-    assert delete_expense(2) == None
-    assert delete_debt(2) == None
-
-
-
-# print('database.py Running')
-
-########################
-# connect_database()
-# init_db()
-
-# database_testing()
-
-# print('Income')
-# print(show_all_income())
-# print('\nExpenses')
-# print(show_all_expenses())
-# print('\nDebts')
-# print(show_all_debts())
-########################
-
-print(add_income('Work 1', 300))
-print(add_income('Work 2', 350))
-# print(show_all_income())
-
-# lastRowID = add_income('work', 100)
-# print('lastRowID ', lastRowID)
-# print(show_all_income())
-# add_income('work2', 120)
-# add_income('work3', 'd')
-# print(show_all_income())
-
-# expense_lastRowID = add_expense('Target', 35, 'Groceries')
-# print('Expenses: ', expense_lastRowID)
-# expense_lastRowID = add_expense('CVS', 50, 'Clothing')
-# print('Expenses: ', expense_lastRowID)
-# print(show_all_expenses())
-
-# debt_lastRowID = add_debt('Personal loan', 200, 8, 5)
-# print('Debt: ', debt_lastRowID)
-# debt_lastRowID = add_debt('Credit card', 50, 19.88, 12)
-# print('Debt: ', debt_lastRowID)
-# print(show_all_debts())
-# delete_debt(1)
-# print(show_all_debts())
-
-
-# delete_all_tables()
-
-# print(show_all_debts())
-# print(show_all_expenses)
-# print(show_all_income)

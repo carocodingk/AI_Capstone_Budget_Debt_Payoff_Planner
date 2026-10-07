@@ -168,27 +168,13 @@ with tab_debts:
         else:
             st.info("No active debts added yet. Use the form on the left to add your accounts.")
 
-#######################
+
     st.subheader("Debt Pay Off Strategy Analysis")
     extra_budget = st.number_input("Extra monthly budget towards debt ($) ", min_value=0.0, step=10.00)
     if not debts: 
         st.warning('No debts reported')
     else:
         snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
-        for i in debts:
-            print('hello ', i)
         avalanche_res = calculate_avalanche(debts, extra_monthly_budget=extra_budget)
-        # print('HELLOOOO ', snowball_res)
-        # for x in snowball_res['monthly_history']:
-        #     print(x)
-        # for x in avalanche_res['monthly_history']:
-        #     print(x)
-
         print(snowball_res)
-        # print('\n')
         print(avalanche_res)
-
-
-    
-
-
