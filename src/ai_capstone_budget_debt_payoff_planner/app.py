@@ -20,8 +20,6 @@ from ai_capstone_budget_debt_payoff_planner.database import (
 )
 
 from ai_capstone_budget_debt_payoff_planner.financial_engine import (
-    # Debt,
-    # collect_debt_details,
     calculate_avalanche, 
     calculate_snowball
 )
@@ -175,24 +173,46 @@ with tab_debts:
         st.warning('No debts reported')
     else:
         print('########### SNOWBALL extra budget ', extra_budget)
-        snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
+        # snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
         print('########### AVALANCHE extra budget ', extra_budget)
         avalanche_res = calculate_avalanche(debts, extra_monthly_budget=extra_budget)
 
-        col_sb, col_av = st.columns(2)
+        # col_sb, col_av = st.columns(2)
             
-        with col_sb:
-            st.metric("Snowball Payoff Time", f"{snowball_res['total_months']} Months")
-            st.metric("Snowball Total Interest", f"${snowball_res['total_interest_paid']:,.2f}")
+        # with col_sb:
+        #     st.metric("Snowball Payoff Time", f"{snowball_res['total_months']} Months")
+        #     st.metric("Snowball Total Interest", f"${snowball_res['total_interest_paid']:,.2f}")
         
-        with col_av:
-            st.metric("Avalanche Payoff Time", f"{avalanche_res['total_months']} Months")
-            st.metric("Avalanche Total Interest", f"${avalanche_res['total_interest_paid']:,.2f}")
+        # with col_av:
+        #     st.metric("Avalanche Payoff Time", f"{avalanche_res['total_months']} Months")
+        #     st.metric("Avalanche Total Interest", f"${avalanche_res['total_interest_paid']:,.2f}")
             
-        interest_saved = snowball_res['total_interest_paid'] - avalanche_res['total_interest_paid']
-        st.success(f"💡 Choosing the **Avalanche strategy** saves you **${interest_saved:,.2f}** in interest charges!")
+        # interest_saved = snowball_res['total_interest_paid'] - avalanche_res['total_interest_paid']
+        # st.success(f"💡 Choosing the **Avalanche strategy** saves you **${interest_saved:,.2f}** in interest charges!")
 
-        for i in snowball_res['monthly_history']:
-            print(i)
+        # for i in snowball_res['monthly_history']:
+        #     print(i)
+
+        for i in avalanche_res['monthly_history']:
+                    print(i)
+
         # print(type(snowball_res))
         # print(avalanche_res)
+
+        #   Chart Payoff Curves
+        # st.markdown("### Balance Reduction Over Time")
+        # df_sb = pd.DataFrame(snowball_res["monthly_history"]).rename(columns={"remaining_balance": "Snowball Balance"})
+        # df_av = pd.DataFrame(avalanche_res["monthly_history"]).rename(columns={"remaining_balance": "Avalanche Balance"})
+        
+        # df_chart = pd.merge(df_sb, df_av, on="month").set_index("month")
+        # st.line_chart(df_chart)
+
+        # # 4. Generate AI Strategy Narrative
+        # st.markdown("### 🤖 AI Financial Mentor Analysis")
+        # if check_ollama_status():
+        #     with st.spinner("Generating comparative analysis with local Llama 3.2..."):
+        #         summary_narrative = generate_strategy_summary(snowball_res, avalanche_res)
+        #         st.info(summary_narrative)
+        # else:
+        #     st.caption("Ollama is offline. Start Ollama locally to display AI strategy summaries.")
+    
