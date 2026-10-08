@@ -174,6 +174,7 @@ with tab_debts:
     if not debts: 
         st.warning('No debts reported')
     else:
+        print('########### extra budget ', extra_budget)
         snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
         avalanche_res = calculate_avalanche(debts, extra_monthly_budget=extra_budget)
 
