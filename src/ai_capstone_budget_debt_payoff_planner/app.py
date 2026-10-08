@@ -176,5 +176,21 @@ with tab_debts:
     else:
         snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
         avalanche_res = calculate_avalanche(debts, extra_monthly_budget=extra_budget)
-        print(snowball_res)
-        print(avalanche_res)
+
+        col_sb, col_av = st.columns(2)
+            
+        with col_sb:
+            st.metric("Snowball Payoff Time", f"{snowball_res['total_months']} Months")
+            st.metric("Snowball Total Interest", f"${snowball_res['total_interest_paid']:,.2f}")
+        
+        with col_av:
+            st.metric("Avalanche Payoff Time", f"{avalanche_res['total_months']} Months")
+            st.metric("Avalanche Total Interest", f"${avalanche_res['total_interest_paid']:,.2f}")
+            
+        interest_saved = snowball_res['total_interest_paid'] - avalanche_res['total_interest_paid']
+        st.success(f"💡 Choosing the **Avalanche strategy** saves you **${interest_saved:,.2f}** in interest charges!")
+
+        for i in snowball_res['monthly_history']:
+            print(i)
+        # print(type(snowball_res))
+        # print(avalanche_res)
