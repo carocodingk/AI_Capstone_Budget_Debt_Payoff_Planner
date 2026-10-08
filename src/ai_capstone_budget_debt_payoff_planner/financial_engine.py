@@ -26,6 +26,7 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
         total_months += 1
         #   Budget available to make extra payment
         current_extra_pool = extra_monthly_budget
+        print(total_months)
 
         #   Estimate accrue monthly interest on all debts
         for debt in avalanche_debt_list:
@@ -37,10 +38,17 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
         #   Make minimum payment to all debts
         for debt in avalanche_debt_list:
             if debt['balance'] > 0:
-                min_pay = min(debt['balance'], debt['min_payment'])
-                debt['balance'] = round(debt['balance'] - min_pay, 2)
+                if debt['balance'] >= debt['min_payment']:
+                    #   Make payment
+                    debt['balance'] = round(debt['balance'] - debt['min_payment'], 2)
+                else:
+                    #   Remaining min_payment portion that it's available for next debt on the list
+                    current_extra_pool += (debt['min_payment'] - debt['balance'])
+                    #   Clear debt
+                    debt['balance'] = 0
+                print('AFTER MIN PAYMENT:  ', debt['name'], debt['balance'], current_extra_pool)
             else:
-                #   Once debt is paid, its min payment is added to extra budget on the following month
+                #   Once debt is paid, its min payment is added to extra budget to be used during current month
                 current_extra_pool += debt['min_payment'] 
 
         #   Use extra budget pool to pay highest APR debt. Ignores other debts even if there's left over extra budget
@@ -50,7 +58,9 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
                 debt['balance'] -= extra_pay
                 #   Remaining extra pool 
                 current_extra_pool -= extra_pay 
-                break
+                # break
+                print('AFTER EXTRA PAYMENT  ', debt['name'], debt['balance'], current_extra_pool)
+
 
         remaining_debt_total = 0
         for debt in avalanche_debt_list:
@@ -109,7 +119,7 @@ def calculate_snowball(debt_list, extra_monthly_budget):
                     debt['balance'] = 0 
                 print('AFTER MIN PAYMENT:  ', debt['name'], debt['balance'], current_extra_pool)
             else:
-                #   Once debt is paid, its min payment is added to extra budget on the following month
+                #   Once debt is paid, its min payment is added to extra budget to be used during current month
                 current_extra_pool += debt['min_payment'] 
 
         #   Use extra budget pool to pay highest APR debt. Ignores other debts even if there's left over extra budget
