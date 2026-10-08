@@ -119,6 +119,14 @@ def calculate_snowball(debt_list, extra_monthly_budget):
         #   Budget available to make extra payment
         current_extra_pool = extra_monthly_budget
         print(total_months)
+
+        # FIX: Establish a clean baseline monthly budget
+        current_extra_pool = extra_monthly_budget
+        for debt in snowball_debt_list:
+            if debt['balance'] <= 0:
+                # If a debt was cleared in a previous month, its min payment permanently rolls into the extra pool
+                current_extra_pool += debt['min_payment']
+
         #   Estimate accrue monthly interest on all debts
         for debt in snowball_debt_list:
             if debt['balance'] > 0:
@@ -127,20 +135,30 @@ def calculate_snowball(debt_list, extra_monthly_budget):
                 total_interest_paid = round(total_interest_paid + interest, 2)
 
         #   Make minimum payment to all debts
+        # for debt in snowball_debt_list:
+        #     if debt['balance'] > 0:
+        #         if debt['balance'] >= debt['min_payment']:
+        #             #   Make payment
+        #             debt['balance'] = round(debt['balance'] - debt['min_payment'], 2)
+        #         else: 
+        #             #   Remaining min_payment portion that it's up for grabs
+        #             current_extra_pool += (debt['min_payment'] - debt['balance'])
+        #             #   Assign debt paid off
+        #             debt['balance'] = 0 
+        #         print('AFTER MIN PAYMENT:  ', debt['name'], debt['balance'], current_extra_pool)
+        #     else:
+        #         #   Once debt is paid, its min payment is added to extra budget to be used during current month
+        #         current_extra_pool += debt['min_payment'] 
+
         for debt in snowball_debt_list:
             if debt['balance'] > 0:
-                if debt['balance'] >= debt['min_payment']:
-                    #   Make payment
-                    debt['balance'] = round(debt['balance'] - debt['min_payment'], 2)
-                else: 
-                    #   Remaining min_payment portion that it's up for grabs
-                    current_extra_pool += (debt['min_payment'] - debt['balance'])
-                    #   Assign debt paid off
-                    debt['balance'] = 0 
-                print('AFTER MIN PAYMENT:  ', debt['name'], debt['balance'], current_extra_pool)
-            else:
-                #   Once debt is paid, its min payment is added to extra budget to be used during current month
-                current_extra_pool += debt['min_payment'] 
+                min_pay = min(debt['balance'], debt['min_payment'])
+                debt['balance'] = round(debt['balance'] - min_pay, 2)
+
+                #If debt is paid off by its minimum payment, any leftover from that minimum payment goes into this month extra pay
+                if debt['balance'] == 0:
+                    current_extra_pool += (debt['min_payment'] - min_pay)
+
 
         #   Use extra budget pool to pay highest APR debt. Ignores other debts even if there's left over extra budget
         for debt in snowball_debt_list:
