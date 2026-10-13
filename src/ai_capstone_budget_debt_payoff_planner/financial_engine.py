@@ -74,7 +74,7 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
                 extra_pay = min(debt['balance'], current_extra_pool)
                 debt['balance'] = round(debt['balance'] - extra_pay, 2)
                 #   Remaining extra pool 
-                current_extra_pool -= round(current_extra_pool - extra_pay, 2)
+                current_extra_pool = round(current_extra_pool - extra_pay, 2)
                 print('AFTER EXTRA PAYMENT  ', debt['name'], debt['balance'], current_extra_pool)
                 #   Ran out of money for extra payments - No need to look at the other debts
                 if current_extra_pool <= 0:
@@ -169,6 +169,9 @@ def calculate_snowball(debt_list, extra_monthly_budget):
                 current_extra_pool -= extra_pay 
                 # break
                 print('AFTER EXTRA PAYMENT  ', debt['name'], debt['balance'], current_extra_pool)
+                #   Ran out of money for extra payments - No need to look at the other debts
+                if current_extra_pool <= 0:
+                    break
 
         remaining_debt_total = 0
         for debt in snowball_debt_list:
