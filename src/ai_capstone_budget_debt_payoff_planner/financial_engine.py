@@ -42,23 +42,6 @@ def calculate_avalanche(debt_list, extra_monthly_budget):
                 debt['balance'] = round(debt['balance'] + interest, 2)  
                 total_interest_paid = round(total_interest_paid + interest, 2)
 
-        #   Make minimum payment to all debts
-        # for debt in avalanche_debt_list:
-        #     if debt['balance'] > 0:
-        #         if debt['balance'] >= debt['min_payment']:
-        #             #   Make payment
-        #             debt['balance'] = round(debt['balance'] - debt['min_payment'], 2)
-        #         else:
-        #             #   Remaining min_payment portion that it's available for next debt on the list
-        #             current_extra_pool += (debt['min_payment'] - debt['balance'])
-        #             #   Clear debt
-        #             debt['balance'] = 0
-        #         print('AFTER MIN PAYMENT:  ', debt['name'], debt['balance'], current_extra_pool)
-        #     else:
-        #         #   Once debt is paid, its min payment is added to extra budget to be used during current month
-        #         current_extra_pool += debt['min_payment'] 
-
-
         for debt in avalanche_debt_list:
             if debt['balance'] > 0:
                 min_pay = min(debt['balance'], debt['min_payment'])
@@ -133,22 +116,6 @@ def calculate_snowball(debt_list, extra_monthly_budget):
                 interest = calculate_monthly_interest(debt['balance'], debt['apr'])
                 debt['balance'] += interest 
                 total_interest_paid = round(total_interest_paid + interest, 2)
-
-        #   Make minimum payment to all debts
-        # for debt in snowball_debt_list:
-        #     if debt['balance'] > 0:
-        #         if debt['balance'] >= debt['min_payment']:
-        #             #   Make payment
-        #             debt['balance'] = round(debt['balance'] - debt['min_payment'], 2)
-        #         else: 
-        #             #   Remaining min_payment portion that it's up for grabs
-        #             current_extra_pool += (debt['min_payment'] - debt['balance'])
-        #             #   Assign debt paid off
-        #             debt['balance'] = 0 
-        #         print('AFTER MIN PAYMENT:  ', debt['name'], debt['balance'], current_extra_pool)
-        #     else:
-        #         #   Once debt is paid, its min payment is added to extra budget to be used during current month
-        #         current_extra_pool += debt['min_payment'] 
 
         for debt in snowball_debt_list:
             if debt['balance'] > 0:
