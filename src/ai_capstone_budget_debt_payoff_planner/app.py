@@ -85,12 +85,13 @@ with tab_income:
         if income:
             df_income = pd.DataFrame(income)
             st.dataframe(df_income[["id", "name", "amount"]], use_container_width=True)
+            total_income = df_income["amount"].sum()
+            st.metric(label='Total income', value=total_income)   
 
             income_to_delete = st.selectbox("Select income source to remove:", [d["id"] for d in income], format_func=lambda x: f"ID {x}: {next(d['name'] for d in income if d['id']==x)}")
             if st.button("Delete Selected Income Source"):
                 delete_income(income_to_delete)
                 st.rerun()
-
 
 #   TAB 2: Expenses Tracker
 with tab_expenses:
@@ -111,7 +112,7 @@ with tab_expenses:
                 if exp_description.strip():
                     if not exp_category.strip():
                         exp_category = categorize_expense(exp_description) if check_ollama_status() else "Other"
-                        print('Here ', exp_category)
+                        # print('Here ', exp_category)
                     add_expense(exp_description, exp_amount, exp_category)
                     st.rerun()
                 else:
@@ -148,7 +149,7 @@ with tab_expenses:
                             value=f"${row['amount']:,.2f}"
                         )
                 # st.markdown("") # Spacing
-            # st.divider()
+            st.divider()
         else:
             st.info('No expenses logged yet')
 
