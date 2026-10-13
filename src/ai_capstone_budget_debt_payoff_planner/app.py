@@ -95,11 +95,13 @@ with tab_income:
 #   TAB 2: Expenses Tracker
 with tab_expenses:
     st.subheader("Expense tracker")
+    expenses = show_all_expenses()
 
     col1, col2 = st.columns([1, 2])
 
     with col1:
-        st.markdown('#### Add new expense')
+        #   Add new expense section
+        st.markdown('##### Add new expense')
         with st.form("add_expense_form", clear_on_submit=True):
             exp_description = st.text_input("Expense description", placeholder="e.g. Breakfast")
             exp_amount = st.number_input("Amount ($)", min_value=0.0, step=5.0)
@@ -115,16 +117,38 @@ with tab_expenses:
                 else:
                     st.error("Please enter a valid expense description.")
 
-    with col2:
-        st.markdown('#### Expenses Log')
-        expenses = show_all_expenses()
-        if expenses:
-            df_expenses = pd.DataFrame(expenses)
-            st.dataframe(df_expenses[["id", "description", "amount", "category"]], use_container_width=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        #   Delete logged expense section
+        st.markdown('##### Delete logged expense')
+        with st.container(border=True):
             expense_to_delete = st.selectbox("Select expense record to remove:", [d["id"] for d in expenses], format_func=lambda x: f"ID {x}: {next(d['description'] for d in expenses if d['id']==x)}")
             if st.button("Delete Selected Expense"):
                 delete_expense(expense_to_delete)
                 st.rerun()
+
+    with col2:
+        st.markdown('##### Expenses Log')
+        # expenses = show_all_expenses()
+        if expenses:
+            df_expenses = pd.DataFrame(expenses)
+            st.dataframe(df_expenses[["id", "description", "amount", "category"]], use_container_width=True)
+            total_spent = df_expenses['amount'].sum()
+            st.metric(label="Total Recorded Expenses", value=f"${total_spent:,.2f}")
+            st.divider()
+            category_totals = df_expenses.groupby("category")["amount"].sum().reset_index()
+            if not category_totals.empty:
+                st.markdown("##### Spent by Category")
+                # Create dynamic columns based on how many categories exist
+                cols = st.columns(len(category_totals))
+                for idx, row in category_totals.iterrows():
+                    with cols[idx]:
+                        st.metric(
+                            label=row["category"], 
+                            value=f"${row['amount']:,.2f}"
+                        )
+                # st.markdown("") # Spacing
+            # st.divider()
         else:
             st.info('No expenses logged yet')
 
