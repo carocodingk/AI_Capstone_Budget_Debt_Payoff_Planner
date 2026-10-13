@@ -20,8 +20,9 @@ from ai_capstone_budget_debt_payoff_planner.database import (
 )
 
 from ai_capstone_budget_debt_payoff_planner.financial_engine import (
-    calculate_avalanche, 
-    calculate_snowball
+    # calculate_avalanche, 
+    # calculate_snowball, 
+    calculate_strategy
 )
 
 from ai_capstone_budget_debt_payoff_planner.llm_service import (
@@ -197,10 +198,11 @@ with tab_debts:
     if not debts: 
         st.warning('No debts reported')
     else:
-        print('########### SNOWBALL extra budget ', extra_budget)
-        snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
-        print('########### AVALANCHE extra budget ', extra_budget)
-        avalanche_res = calculate_avalanche(debts, extra_monthly_budget=extra_budget)
+        # print('########### SNOWBALL extra budget ', extra_budget)
+        # snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
+        snowball_res = calculate_strategy('Snowball', debts, extra_monthly_budget=extra_budget)
+        # print('########### AVALANCHE extra budget ', extra_budget)
+        avalanche_res = calculate_strategy('Avalanche',debts, extra_monthly_budget=extra_budget)
 
         col_sb, col_av = st.columns(2)
             
