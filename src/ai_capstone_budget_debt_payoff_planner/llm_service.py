@@ -16,18 +16,29 @@ def check_ollama_status():
 def categorize_expense(description):
     """ Categorize expenses based on description or name of vendor into JSON format """
 
-    system_prompt = f"""You are a financial advisor. Your task is to categorize an expense into EXACTLY ONE category from 
-        this list: {CATEGORIES} based on a description or the name of the vendor. You must respond with ONE valid JSON object 
+    system_prompt = f"""You are an expert financial categorizer. Your task is to categorize an expense into EXACTLY ONE category from 
+        this list: {CATEGORIES} based on a description or the name of the vendor. Anything related to food or drinks must be categorized as food. 
+        Any description or vendor that includes mobile, categorize it as utilities. You must respond with ONE valid JSON object 
         in this schema: {{'category': "<selected_category>"}}
         """
+
+    messages = [
+        {"role": "system", "content": system_prompt},
+        # Example 1
+        {"role": "user", "content": "Cake, drinks, beer, soda"},
+        {"role": "assistant", "content": '{"category": "Food"}'},
+        # Target
+        {"role": "user", "content": f"Expense description: '{description}'"}
+    ]
 
     try: 
         response = ollama.chat(
             model = 'llama3.2',
-            messages = [
-                {'role': 'system', 'content': system_prompt},
-                {'role': 'user', 'content': f"Expense description or vendor: {description}"}
-            ],
+            messages=messages,
+            # messages = [
+            #     {'role': 'system', 'content': system_prompt},
+            #     {'role': 'user', 'content': f"Expense description or vendor: {description}"}
+            # ],
             format = 'json'
         )
 
