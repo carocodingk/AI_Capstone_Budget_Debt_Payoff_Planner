@@ -53,10 +53,6 @@ def categorize_expense(description):
         response = ollama.chat(
             model = 'llama3.2',
             messages=messages,
-            # messages = [
-            #     {'role': 'system', 'content': system_prompt},
-            #     {'role': 'user', 'content': f"Expense description or vendor: {description}"}
-            # ],
             format = 'json'
         )
 

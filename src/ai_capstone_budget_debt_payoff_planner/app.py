@@ -59,6 +59,7 @@ st.divider()
 tab_income, tab_expenses, tab_debts = st.tabs(["Income Sources", "Expenses Trackers", "Debt Management"])
 
 #   TAB 1: Income Streams
+################################################################################
 with tab_income:
     st.subheader("Manage Income Sources")
 
@@ -93,6 +94,7 @@ with tab_income:
                 st.rerun()
 
 #   TAB 2: Expenses Tracker
+################################################################################
 with tab_expenses:
     st.subheader("Expense tracker")
     expenses = show_all_expenses()
@@ -133,27 +135,35 @@ with tab_expenses:
         if expenses:
             df_expenses = pd.DataFrame(expenses)
             st.dataframe(df_expenses[["id", "description", "amount", "category"]], use_container_width=True)
+            #   Calculate total spent
             total_spent = df_expenses['amount'].sum()
             st.metric(label="Total Recorded Expenses", value=f"${total_spent:,.2f}")
             st.divider()
+            #   Calculate category total spent
             category_totals = df_expenses.groupby("category")["amount"].sum().reset_index()
+
             if not category_totals.empty:
                 st.markdown("##### Spent by Category")
-                # Create dynamic columns based on how many categories exist
-                cols = st.columns(len(category_totals))
-                for idx, row in category_totals.iterrows():
-                    with cols[idx]:
-                        st.metric(
-                            label=row["category"], 
-                            value=f"${row['amount']:,.2f}"
-                        )
-                # st.markdown("") # Spacing
+                cols_per_row = 3
+                records = category_totals.to_dict(orient="records")
+
+                for i in range(0, len(records), cols_per_row):
+                    row_records = records[i: i + cols_per_row]
+                    cols = st.columns(cols_per_row)
+                    for idx, record in enumerate(row_records):
+                        with cols[idx]:
+                            st.metric(
+                                label=record["category"], 
+                                value=f"${record['amount']:,.2f}"
+                            )
+                st.markdown("") # Spacing
             st.divider()
         else:
             st.info('No expenses logged yet')
 
 
 #   TAB 3: Debts tracker
+################################################################################
 with tab_debts:
     st.subheader("Manage Active Debts")
     debts = show_all_debts()
@@ -196,10 +206,7 @@ with tab_debts:
     if not debts: 
         st.warning('No debts reported')
     else:
-        # print('########### SNOWBALL extra budget ', extra_budget)
-        # snowball_res = calculate_snowball(debts, extra_monthly_budget=extra_budget)
         snowball_res = calculate_strategy('Snowball', debts, extra_monthly_budget=extra_budget)
-        # print('########### AVALANCHE extra budget ', extra_budget)
         avalanche_res = calculate_strategy('Avalanche',debts, extra_monthly_budget=extra_budget)
 
         col_sb, col_av = st.columns(2)

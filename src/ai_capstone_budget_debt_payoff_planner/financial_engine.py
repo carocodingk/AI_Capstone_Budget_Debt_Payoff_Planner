@@ -74,8 +74,8 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
         })
 
     #####
-    for i in monthly_history:
-        print(i)    
+    # for i in monthly_history:
+    #     print(i)    
     # print(monthly_history)
     return {
         'strategy': strategy,
