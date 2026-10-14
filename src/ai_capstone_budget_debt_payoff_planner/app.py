@@ -20,8 +20,6 @@ from ai_capstone_budget_debt_payoff_planner.database import (
 )
 
 from ai_capstone_budget_debt_payoff_planner.financial_engine import (
-    # calculate_avalanche, 
-    # calculate_snowball, 
     calculate_strategy
 )
 
@@ -242,4 +240,3 @@ with tab_debts:
                 st.info(summary_narrative)
         else:
             st.caption("Ollama is offline. Start Ollama locally to display AI strategy summaries.")
-    

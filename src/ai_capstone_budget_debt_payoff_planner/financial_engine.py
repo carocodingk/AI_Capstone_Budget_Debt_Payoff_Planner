@@ -9,9 +9,10 @@ def calculate_monthly_interest(balance, apr):
 
 def calculate_strategy(strategy, debt_list, extra_monthly_budget):
     """
-        Calculates timeline to pay off all debts in a closed balance system using avalance method. 
-        Paying minimum required amount on all debts and focusing extra monthly budget on smallest interest rate (APR). 
-        This method pay debts from lowest balance to highest APR.
+        Calculates timeline to pay off all debts in a closed balance system using avalance and snowball method. 
+        *   Avalanche method: Paying minimum required amount on all debts and focusing extra monthly budget on debts 
+        with highest interest rate (APR). This method pays debts from highest APR to lowest.
+        *   Snowball method: Paying minimum required amount on all debts and focusing extra monthly budget on debts with lowest balance.  
     """
     total_months = 0
     total_interest_paid = 0
@@ -28,7 +29,6 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
         total_months += 1
         #   Budget available to make extra payment
         current_extra_pool = extra_monthly_budget
-        # print(total_months)
 
         # FIX: Establish a clean baseline monthly budget
         current_extra_pool = extra_monthly_budget
@@ -60,13 +60,10 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
                 debt['balance'] = round(debt['balance'] - extra_pay, 2)
                 #   Remaining extra pool 
                 current_extra_pool = round(current_extra_pool - extra_pay, 2)
-                # print('AFTER EXTRA PAYMENT  ', debt['name'], debt['balance'], current_extra_pool)
                 #   Ran out of money for extra payments - No need to look at the other debts
                 if current_extra_pool <= 0:
                     break
                 
-
-
         remaining_debt_total = 0
         for debt in strategy_debt_list:
             remaining_debt_total += debt['balance']
@@ -81,7 +78,6 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
         print(i)    
     # print(monthly_history)
     return {
-        # avalanche_debt_list
         'strategy': strategy,
         'total_months': total_months,
         'total_interest_paid': total_interest_paid,

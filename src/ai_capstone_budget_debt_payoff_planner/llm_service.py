@@ -16,17 +16,35 @@ def check_ollama_status():
 def categorize_expense(description):
     """ Categorize expenses based on description or name of vendor into JSON format """
 
-    system_prompt = f"""You are an expert financial categorizer. Your task is to categorize an expense into EXACTLY ONE category from 
-        this list: {CATEGORIES} based on a description or the name of the vendor. Anything related to food or drinks must be categorized as food. 
-        Any description or vendor that includes mobile, categorize it as utilities. You must respond with ONE valid JSON object 
-        in this schema: {{'category': "<selected_category>"}}
+    #   System prompt with explicit category rules
+    system_prompt = f"""You are an expert financial classifier. Your task is to categorize an expense into EXACTLY ONE category from 
+        this list: {CATEGORIES} based on a description or the name of the vendor. 
+        Important rules:
+        -   "Food" includes any mention of food, drinks, alcohol and beverages.
+        -   "Utilities" includes electricity, water, gas, internet, and phone/cellular bills (such as Verizon, AT&T, T-Mobile, Lycamobile, Mint Mobile).
+        -   "Transportation" is strictly for gas stations, public transit, car payments, tolls, and auto insurance.
+        -   "Other" if you are not sure
+        You must respond with ONE valid JSON object in this schema: {{'category': "<selected_category>"}}
         """
 
+    #   N-shot examples 
     messages = [
         {"role": "system", "content": system_prompt},
         # Example 1
         {"role": "user", "content": "Cake, drinks, beer, soda"},
         {"role": "assistant", "content": '{"category": "Food"}'},
+        # Example 2
+        {"role": "user", "content": "Expense description: 'Trader Joe's groceries'"},
+        {"role": "assistant", "content": '{"category": "Food"}'},
+        # Example 3
+        {"role": "user", "content": "Expense description: 'Bolla'"},
+        {"role": "assistant", "content": '{"category": "Transportation"}'},
+        # Example 4
+        {"role": "user", "content": "Expense description: 'T-Mobile monthly bill'"},
+        {"role": "assistant", "content": '{"category": "Utilities"}'},
+        # Example 5        
+        {"role": "user", "content": "Expense description: 'AMC Movie Tickets'"},
+        {"role": "assistant", "content": '{"category": "Entertainment"}'},
         # Target
         {"role": "user", "content": f"Expense description: '{description}'"}
     ]
