@@ -55,7 +55,6 @@ st.divider()
 ################################################################################
 #   Main Dashboard Layout
 ################################################################################
-
 tab_income, tab_expenses, tab_debts = st.tabs(["Income Sources", "Expenses Trackers", "Debt Management"])
 
 #   TAB 1: Income Streams
@@ -92,13 +91,14 @@ with tab_income:
             if st.button("Delete Selected Income Source"):
                 delete_income(income_to_delete)
                 st.rerun()
+        else:
+            st.info('No income logged yet')
 
 #   TAB 2: Expenses Tracker
 ################################################################################
 with tab_expenses:
     st.subheader("Expense tracker")
     expenses = show_all_expenses()
-
     col1, col2 = st.columns([1, 2])
 
     with col1:
