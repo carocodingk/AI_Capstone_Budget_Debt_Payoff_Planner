@@ -84,7 +84,7 @@ with tab_income:
         income = show_all_income()
         if income:
             df_income = pd.DataFrame(income)
-            st.dataframe(df_income[["id", "name", "amount"]], use_container_width=True, hide_index=True)
+            st.dataframe(df_income[["id", "name", "amount"]], width='stretch', hide_index=True)
             total_income = df_income["amount"].sum()
             st.metric(label='Total income', value=total_income)   
 
@@ -134,7 +134,7 @@ with tab_expenses:
         # expenses = show_all_expenses()
         if expenses:
             df_expenses = pd.DataFrame(expenses)
-            st.dataframe(df_expenses[["id", "description", "amount", "category"]], use_container_width=True, hide_index=True)
+            st.dataframe(df_expenses[["id", "description", "amount", "category"]], width='stretch', hide_index=True)
             #   Calculate total spent
             total_spent = df_expenses['amount'].sum()
             st.metric(label="Total Recorded Expenses", value=f"${total_spent:,.2f}")
@@ -190,7 +190,7 @@ with tab_debts:
         # debts = show_all_debts()
         if debts:
             df_debts = pd.DataFrame(debts)
-            st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], use_container_width=True, hide_index=True)
+            st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], width='stretch', hide_index=True)
             
             # Simple deletion control
             debt_to_delete = st.selectbox("Select debt to remove:", [d["id"] for d in debts], format_func=lambda x: f"ID {x}: {next(d['name'] for d in debts if d['id']==x)}")
