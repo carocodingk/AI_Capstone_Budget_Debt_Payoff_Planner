@@ -222,8 +222,6 @@ with tab_debts:
         interest_saved = snowball_res['total_interest_paid'] - avalanche_res['total_interest_paid']
         st.success(f"💡 Choosing the **Avalanche strategy** saves you **${interest_saved:,.2f}** in interest charges!")
 
-
-
         
         #   Generate AI Strategy Narrative
         st.markdown("### 🤖 AI Financial Mentor Analysis")
@@ -238,7 +236,6 @@ with tab_debts:
         st.markdown("### Balance Reduction Over Time")
         df_sb = pd.DataFrame(snowball_res["monthly_history"]).rename(columns={"remaining_balance": "Remaining Total Balance"})
         df_av = pd.DataFrame(avalanche_res["monthly_history"]).rename(columns={"remaining_balance": "Remaining Total Balance"})
-        # st.markdown("### Monthly Details")
         col_snow, col_aval = st.columns(2)
         with col_snow:
             st.markdown("#### Snowball method")
