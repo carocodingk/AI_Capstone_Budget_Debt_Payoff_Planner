@@ -190,8 +190,7 @@ with tab_debts:
         # debts = show_all_debts()
         if debts:
             df_debts = pd.DataFrame(debts)
-            # st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], use_container_width=True)
-            st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment", "is_active"]], use_container_width=True)
+            st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], use_container_width=True)
             
             # Simple deletion control
             debt_to_delete = st.selectbox("Select debt to remove:", [d["id"] for d in debts], format_func=lambda x: f"ID {x}: {next(d['name'] for d in debts if d['id']==x)}")
@@ -223,22 +222,14 @@ with tab_debts:
         interest_saved = snowball_res['total_interest_paid'] - avalanche_res['total_interest_paid']
         st.success(f"💡 Choosing the **Avalanche strategy** saves you **${interest_saved:,.2f}** in interest charges!")
 
-        # for i in snowball_res['monthly_history']:
-        #     print(i)
-
-        # for i in avalanche_res['monthly_history']:
-        #             print(i)
-
-        # print(type(snowball_res))
-        # print(avalanche_res)
 
         #   Chart Payoff Curves
         st.markdown("### Balance Reduction Over Time")
         df_sb = pd.DataFrame(snowball_res["monthly_history"]).rename(columns={"remaining_balance": "Snowball Balance"})
         df_av = pd.DataFrame(avalanche_res["monthly_history"]).rename(columns={"remaining_balance": "Avalanche Balance"})
         
-        df_chart = pd.merge(df_sb, df_av, on="month").set_index("month")
-        st.line_chart(df_chart)
+        # df_chart = pd.merge(df_sb, df_av, on="month").set_index("month")
+        # st.line_chart(df_chart)
 
         #   Generate AI Strategy Narrative
         st.markdown("### 🤖 AI Financial Mentor Analysis")
@@ -249,5 +240,10 @@ with tab_debts:
         else:
             st.caption("Ollama is offline. Start Ollama locally to display AI strategy summaries.")
 
-        print(df_sb)
-        st.dataframe(df_sb[["month", "Snowball Balance", "current_month_paid_interest"]], use_container_width=True)
+        #   Monthly payment details
+        st.markdown("### Monthly Details")
+        col_snow, col_aval = st.columns(2)
+        with col_snow:
+            st.dataframe(df_sb)
+        with col_aval:
+            st.dataframe(df_av)

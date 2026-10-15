@@ -77,13 +77,15 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
 
         #   Update remaining total debt balance after current month payment
         remaining_debt_total = 0
+        active_debts = []
         for debt in strategy_debt_list:
             remaining_debt_total += debt['balance']
-            
+
+            if debt['balance'] > 0:
+                monthly_history[total_months-1][debt['name']] = debt['balance']
+
         monthly_history[total_months-1]['remaining_balance'] = round(remaining_debt_total, 2)
         monthly_history[total_months-1]['current_month_paid_interest'] = round(current_month_interest, 2)
-
-        # print(monthly_history[total_months-1])
 
     return {
         'strategy': strategy,

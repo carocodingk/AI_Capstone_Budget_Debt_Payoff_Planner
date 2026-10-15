@@ -40,8 +40,7 @@ def init_db():
                 name TEXT NOT NULL, 
                 balance REAL NOT NULL, 
                 apr REAL NOT NULL, 
-                min_payment REAL NOT NULL,
-                is_active INTEGER DEFAULT 1
+                min_payment REAL NOT NULL
             );
         """)
         #   Save data 
@@ -132,7 +131,7 @@ def add_debt(name, balance, apr, min_payment):
         cursor = conn.cursor()
         #   Using parameterized queries to prevent SQL injection attacks
         cursor.execute(
-            "INSERT INTO debts (name, balance, apr, min_payment, is_active) VALUES (?, ?, ?, ?, ?);", (name, balance, apr, min_payment, 1)
+            "INSERT INTO debts (name, balance, apr, min_payment) VALUES (?, ?, ?, ?);", (name, balance, apr, min_payment)
         )
         conn.commit()
         return cursor.lastrowid
@@ -154,9 +153,3 @@ def delete_debt(debt_id):
         cursor = conn.cursor()
         cursor.execute("DELETE FROM debts WHERE id = ?", (debt_id,))
         conn.commit()
-
-def active(debt_id):
-    """Changes is_active status to FALSE when debt is paid off"""
-    with connect_database() as conn:
-        cursor = conn.cursor()
-        cursor.execute("UPDATE debts SET is_active = FALSE WHERE id = ?", (debt_id))
