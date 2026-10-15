@@ -84,7 +84,7 @@ with tab_income:
         income = show_all_income()
         if income:
             df_income = pd.DataFrame(income)
-            st.dataframe(df_income[["id", "name", "amount"]], use_container_width=True)
+            st.dataframe(df_income[["id", "name", "amount"]], use_container_width=True, hide_index=True)
             total_income = df_income["amount"].sum()
             st.metric(label='Total income', value=total_income)   
 
@@ -134,7 +134,7 @@ with tab_expenses:
         # expenses = show_all_expenses()
         if expenses:
             df_expenses = pd.DataFrame(expenses)
-            st.dataframe(df_expenses[["id", "description", "amount", "category"]], use_container_width=True)
+            st.dataframe(df_expenses[["id", "description", "amount", "category"]], use_container_width=True, hide_index=True)
             #   Calculate total spent
             total_spent = df_expenses['amount'].sum()
             st.metric(label="Total Recorded Expenses", value=f"${total_spent:,.2f}")
@@ -190,7 +190,7 @@ with tab_debts:
         # debts = show_all_debts()
         if debts:
             df_debts = pd.DataFrame(debts)
-            st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], use_container_width=True)
+            st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], use_container_width=True, hide_index=True)
             
             # Simple deletion control
             debt_to_delete = st.selectbox("Select debt to remove:", [d["id"] for d in debts], format_func=lambda x: f"ID {x}: {next(d['name'] for d in debts if d['id']==x)}")
@@ -225,8 +225,8 @@ with tab_debts:
 
         #   Chart Payoff Curves
         st.markdown("### Balance Reduction Over Time")
-        df_sb = pd.DataFrame(snowball_res["monthly_history"]).rename(columns={"remaining_balance": "Snowball Balance"})
-        df_av = pd.DataFrame(avalanche_res["monthly_history"]).rename(columns={"remaining_balance": "Avalanche Balance"})
+        df_sb = pd.DataFrame(snowball_res["monthly_history"]).rename(columns={"remaining_balance": "Total Balance"})
+        df_av = pd.DataFrame(avalanche_res["monthly_history"]).rename(columns={"remaining_balance": "Total Balance"})
         
         # df_chart = pd.merge(df_sb, df_av, on="month").set_index("month")
         # st.line_chart(df_chart)
@@ -244,6 +244,20 @@ with tab_debts:
         st.markdown("### Monthly Details")
         col_snow, col_aval = st.columns(2)
         with col_snow:
-            st.dataframe(df_sb)
+            st.markdown("#### Snowball method")
+            st.dataframe(
+                df_sb,
+                column_config={
+                    "current_month_paid_interest": "Monthly Interest"
+                },
+                hide_index=True
+            )
         with col_aval:
-            st.dataframe(df_av)
+            st.markdown("#### Avalanche method")
+            st.dataframe(
+                df_av,
+                column_config={
+                    "current_month_paid_interest": "Monthly Interest"
+                },
+                hide_index=True
+            )

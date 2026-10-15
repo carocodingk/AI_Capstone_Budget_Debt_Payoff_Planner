@@ -31,7 +31,7 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
         current_month_interest = 0
         
         monthly_history.append({
-            'month': total_months
+            'Month': total_months
         })
 
         #   Budget available to make extra payment
@@ -82,10 +82,10 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
             remaining_debt_total += debt['balance']
 
             if debt['balance'] > 0:
-                monthly_history[total_months-1][debt['name']] = debt['balance']
+                monthly_history[total_months-1][debt['name']] = f"${debt['balance']:,.2f}"
 
-        monthly_history[total_months-1]['remaining_balance'] = round(remaining_debt_total, 2)
-        monthly_history[total_months-1]['current_month_paid_interest'] = round(current_month_interest, 2)
+        monthly_history[total_months-1]['remaining_balance'] = f"${round(remaining_debt_total, 2):,.2f}"
+        monthly_history[total_months-1]['current_month_paid_interest'] = f"${round(current_month_interest, 2):,.2f}"
 
     return {
         'strategy': strategy,
