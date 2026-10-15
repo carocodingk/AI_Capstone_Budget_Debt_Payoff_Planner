@@ -1,6 +1,11 @@
-# CAP 942 Capstone Implementation Plan: AI Budget & Debt Payoff Planner (`ai_capstone_carolina`)
+# CAP 942 Capstone Implementation Plan: AI Budget & Debt Payoff Planner (`ai_capstone_budget_debt_payoff_planner`)
 
 An AI-powered, privacy-first personal finance dashboard built for macOS Apple Silicon. This application combines deterministic Python financial math with a local open-source LLM via Ollama to categorize expenses, calculate debt payoff schedules, and generate clear financial strategy insights.
+
+## How to run 
+```bash
+uv run streamlit run src/ai_capstone_budget_debt_payoff_planner/app.py
+```
 
 ---
 
