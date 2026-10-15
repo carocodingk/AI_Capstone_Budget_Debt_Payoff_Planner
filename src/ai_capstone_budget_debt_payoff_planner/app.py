@@ -190,7 +190,8 @@ with tab_debts:
         # debts = show_all_debts()
         if debts:
             df_debts = pd.DataFrame(debts)
-            st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], use_container_width=True)
+            # st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment"]], use_container_width=True)
+            st.dataframe(df_debts[["id", "name", "balance", "apr", "min_payment", "is_active"]], use_container_width=True)
             
             # Simple deletion control
             debt_to_delete = st.selectbox("Select debt to remove:", [d["id"] for d in debts], format_func=lambda x: f"ID {x}: {next(d['name'] for d in debts if d['id']==x)}")
@@ -239,7 +240,7 @@ with tab_debts:
         df_chart = pd.merge(df_sb, df_av, on="month").set_index("month")
         st.line_chart(df_chart)
 
-        # 4. Generate AI Strategy Narrative
+        #   Generate AI Strategy Narrative
         st.markdown("### 🤖 AI Financial Mentor Analysis")
         if check_ollama_status():
             with st.spinner("Generating comparative analysis with local Llama 3.2..."):
@@ -247,3 +248,6 @@ with tab_debts:
                 st.info(summary_narrative)
         else:
             st.caption("Ollama is offline. Start Ollama locally to display AI strategy summaries.")
+
+        print(df_sb)
+        st.dataframe(df_sb[["month", "Snowball Balance", "current_month_paid_interest"]], use_container_width=True)

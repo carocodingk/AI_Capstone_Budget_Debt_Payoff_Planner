@@ -18,13 +18,12 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
     total_interest_paid = 0
     monthly_history = []
 
-    # Sort debt list by APR in descending (highest APR -> lowest APR). Use deepcopy to avoid modified data during loop
+    #   Sort debt list by APR in descending (highest APR -> lowest APR). Use deepcopy to avoid modified data during loop
     strategy_debt_list = copy.deepcopy(debt_list)
     if strategy == 'Snowball':
         strategy_debt_list.sort(key=lambda debt: debt['balance'])
     elif strategy == 'Avalanche':
         strategy_debt_list.sort(key=lambda debt: debt['apr'], reverse=True)
-    # print(strategy.upper())
 
     #   One loop per month 
     while any (debt['balance'] > 0 for debt in strategy_debt_list):
@@ -34,13 +33,9 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
         monthly_history.append({
             'month': total_months
         })
-        # print('here ', monthly_history[total_months-1])
 
         #   Budget available to make extra payment
         current_extra_pool = extra_monthly_budget
-
-        # FIX: Establish a clean baseline monthly budget
-        # current_extra_pool = extra_monthly_budget
 
         #   Establish a clean baseline monthly budget
         for debt in strategy_debt_list:
@@ -51,9 +46,6 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
         #   Estimate accrue monthly interest on all debts
         for debt in strategy_debt_list:
             if debt['balance'] > 0:
-                # interest = calculate_monthly_interest(debt['balance'], debt['apr'])
-                # debt['balance'] = round(debt['balance'] + interest, 2)  
-                # total_interest_paid = round(total_interest_paid + interest, 2)
                 interest = calculate_monthly_interest(debt['balance'], debt['apr'])
                 current_month_interest += interest
                 debt['balance'] = round(debt['balance'] + interest, 2)  
@@ -66,7 +58,7 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
                 #   Update balance after minimum payment
                 debt['balance'] = round(debt['balance'] - min_pay, 2)
 
-                #If debt is paid off by its minimum payment, any leftover from that minimum payment goes into current month extra pay
+                #   If debt is paid off by its minimum payment, any leftover from that minimum payment goes into current month extra pay
                 if debt['balance'] == 0:
                     current_extra_pool += (debt['min_payment'] - min_pay)
 
@@ -88,21 +80,11 @@ def calculate_strategy(strategy, debt_list, extra_monthly_budget):
         for debt in strategy_debt_list:
             remaining_debt_total += debt['balance']
             
-        # monthly_history[total_months] ={
-        #     # 'month': total_months,
-        #     'remaining_balance': round(remaining_debt_total, 2)
-        # }
-        # monthly_history[total_months-1]['remaining_balance'] = round(remaining_debt_total, 2)
         monthly_history[total_months-1]['remaining_balance'] = round(remaining_debt_total, 2)
         monthly_history[total_months-1]['current_month_paid_interest'] = round(current_month_interest, 2)
 
-        print(monthly_history[total_months-1])
+        # print(monthly_history[total_months-1])
 
-    #####
-    # for i in monthly_history:
-    #     print(i)    
-    # print(monthly_history)
-    # print(type(monthly_history))
     return {
         'strategy': strategy,
         'total_months': total_months,
