@@ -223,14 +223,8 @@ with tab_debts:
         st.success(f"💡 Choosing the **Avalanche strategy** saves you **${interest_saved:,.2f}** in interest charges!")
 
 
-        #   Chart Payoff Curves
-        st.markdown("### Balance Reduction Over Time")
-        df_sb = pd.DataFrame(snowball_res["monthly_history"]).rename(columns={"remaining_balance": "Total Balance"})
-        df_av = pd.DataFrame(avalanche_res["monthly_history"]).rename(columns={"remaining_balance": "Total Balance"})
-        
-        # df_chart = pd.merge(df_sb, df_av, on="month").set_index("month")
-        # st.line_chart(df_chart)
 
+        
         #   Generate AI Strategy Narrative
         st.markdown("### 🤖 AI Financial Mentor Analysis")
         if check_ollama_status():
@@ -241,14 +235,17 @@ with tab_debts:
             st.caption("Ollama is offline. Start Ollama locally to display AI strategy summaries.")
 
         #   Monthly payment details
-        st.markdown("### Monthly Details")
+        st.markdown("### Balance Reduction Over Time")
+        df_sb = pd.DataFrame(snowball_res["monthly_history"]).rename(columns={"remaining_balance": "Remaining Total Balance"})
+        df_av = pd.DataFrame(avalanche_res["monthly_history"]).rename(columns={"remaining_balance": "Remaining Total Balance"})
+        # st.markdown("### Monthly Details")
         col_snow, col_aval = st.columns(2)
         with col_snow:
             st.markdown("#### Snowball method")
             st.dataframe(
                 df_sb,
                 column_config={
-                    "current_month_paid_interest": "Monthly Interest"
+                    "current_month_paid_interest": "Monthly Interest Paid"
                 },
                 hide_index=True
             )
@@ -257,7 +254,7 @@ with tab_debts:
             st.dataframe(
                 df_av,
                 column_config={
-                    "current_month_paid_interest": "Monthly Interest"
+                    "current_month_paid_interest": "Monthly Interest Paid"
                 },
                 hide_index=True
             )
